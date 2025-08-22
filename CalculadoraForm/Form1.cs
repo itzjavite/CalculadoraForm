@@ -22,7 +22,34 @@ namespace CalculadoraForm
 
         private void btnIgual_Click(object sender, EventArgs e)
         {
-            // Implementar depois...
+            try
+            {
+                string expressao = txbTela.Text;
+
+                // Usa a função Compute da classe DataTable:
+                var resultado = new DataTable().Compute(expressao, null).ToString();
+
+                // Mostra o resultado:
+                txbTela.Text = resultado.ToString();
+
+                if (double.IsInfinity(Convert.ToDouble(resultado)))
+                {
+                    MessageBox.Show("Deu ruim Parsa! 8(");
+                    txbTela.Text = "";
+                    operadorClicado = true;
+                }
+                else
+                {
+                    txbTela.Text = resultado; // já é string
+                }
+            }
+            catch (Exception ex)
+            {
+                // Caso a expressão esteja errada:
+                MessageBox.Show("Erro ao calcular: " + ex.Message);
+                txbTela.Text = "";
+            }
+
         }
 
         private void numero_Click(object sender, EventArgs e)
@@ -52,6 +79,14 @@ namespace CalculadoraForm
                 operadorClicado = true;
             }
             
+        }
+
+        private void btnLimpar_Click(object sender, EventArgs e)
+        {
+            // Limpar a tela:
+            txbTela.Text = "";
+            // Voltar o operador clicado para true:
+            operadorClicado = true;
         }
     }
 }
